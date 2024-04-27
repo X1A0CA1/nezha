@@ -100,8 +100,8 @@ func (v *apiV1) monitorHistoriesById(c *gin.Context) {
 	}
 
 	_, isMember := c.Get(model.CtxKeyAuthorizedUser)
-	_, isViewPasswordVerfied := c.Get(model.CtxKeyViewPasswordVerified)
-	authorized := isMember || isViewPasswordVerfied
+	_, isViewPasswordVerified := c.Get(model.CtxKeyViewPasswordVerified)
+	authorized := isMember || isViewPasswordVerified
 
 	if server.HideForGuest && !authorized {
 		c.AbortWithStatusJSON(403, gin.H{"code": 403, "message": "需要认证"})

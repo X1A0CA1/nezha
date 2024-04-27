@@ -176,7 +176,7 @@ func (cp *commonPage) network(c *gin.Context) {
 	monitorHistories := singleton.MonitorAPI.GetMonitorHistories(map[string]any{"server_id": id})
 	monitorInfos, _ = utils.Json.Marshal(monitorHistories)
 	_, isMember := c.Get(model.CtxKeyAuthorizedUser)
-	_, isViewPasswordVerfied := c.Get(model.CtxKeyViewPasswordVerified)
+	_, isViewPasswordVerified := c.Get(model.CtxKeyViewPasswordVerified)
 
 	if err := singleton.DB.Model(&model.MonitorHistory{}).
 		Select("distinct(server_id)").
@@ -192,7 +192,7 @@ func (cp *commonPage) network(c *gin.Context) {
 		}, true)
 		return
 	}
-	if isMember || isViewPasswordVerfied {
+	if isMember || isViewPasswordVerified {
 		for _, server := range singleton.SortedServerList {
 			for _, id := range serverIdsWithMonitor {
 				if server.ID == id {
@@ -228,11 +228,11 @@ func (cp *commonPage) getServerStat(c *gin.Context) ([]byte, error) {
 		defer singleton.SortedServerLock.RUnlock()
 
 		_, isMember := c.Get(model.CtxKeyAuthorizedUser)
-		_, isViewPasswordVerfied := c.Get(model.CtxKeyViewPasswordVerified)
+		_, isViewPasswordVerified := c.Get(model.CtxKeyViewPasswordVerified)
 
 		var servers []*model.Server
 
-		if isMember || isViewPasswordVerfied {
+		if isMember || isViewPasswordVerified {
 			servers = singleton.SortedServerList
 		} else {
 			servers = singleton.SortedServerListForGuest
